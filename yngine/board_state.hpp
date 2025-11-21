@@ -8,6 +8,13 @@
 
 #include <optional>
 
+// Forward declaration for friend class
+namespace expo {
+namespace mcts {
+class MctsJSIModule;
+}
+}
+
 namespace Yngine {
 
 enum class NextAction : uint8_t {
@@ -34,6 +41,9 @@ public:
     Color whose_move() const;
 
     friend std::ostream& operator<<(std::ostream& out, BoardState board_state);
+    
+    // MctsJSIModule에서 BoardState를 구성하기 위한 friend 선언
+    friend class expo::mcts::MctsJSIModule;
 
 private:
     void generate_ring_placement_moves(MoveList& move_list) const;
