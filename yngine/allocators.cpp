@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#if defined(__linux__) || defined(EMSCRIPTEN)
+#if defined(__linux__) || defined(EMSCRIPTEN) || defined(__APPLE__)
 #include <sys/mman.h>
 #elif defined(_WIN32)
 #include <Windows.h>
@@ -15,7 +15,7 @@ namespace Yngine {
 ArenaAllocator::ArenaAllocator(std::size_t capacity)
     : capacity{capacity}
     , used{0} {
-#if defined(__linux__) || defined(EMSCRIPTEN)
+#if defined(__linux__) || defined(EMSCRIPTEN) || defined(__APPLE__)
     const auto data = mmap(
         nullptr,
         capacity,
@@ -47,7 +47,7 @@ ArenaAllocator::ArenaAllocator(std::size_t capacity)
 }
 
 ArenaAllocator::~ArenaAllocator() {
-#if defined(__linux__)
+#if defined(__linux__) || defined(EMSCRIPTEN) || defined(__APPLE__)
     munmap(this->data, this->capacity);
 #elif defined(_WIN32)
     VirtualFree(this->data, 0, MEM_RELEASE);
